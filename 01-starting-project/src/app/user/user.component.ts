@@ -1,4 +1,4 @@
-import { Component, computed, Input, input } from '@angular/core';
+import { Component, Input, computed, input } from '@angular/core';
 
 import { DUMMY_USERS } from '../dummy-users'
 
