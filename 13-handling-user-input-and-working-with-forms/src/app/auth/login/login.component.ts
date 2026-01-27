@@ -11,11 +11,21 @@ import { debounceTime } from 'rxjs';
 })
 export class LoginComponent {
   private form = viewChild.required<NgForm>('form');
-private destroyRef = inject(DestroyRef);
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
     afterNextRender(() => {
-      const subscription = this.form().valueChanges?.pipe(debounceTime(500)).subscribe({
+      const savedForm = window.localStorage.getItem('saved-login-form');
+
+      if (savedForm) {
+        const loadedFormData = JSON.parse(savedForm);
+        const savedEmail = loadedFormData.email;
+        setTimeout(() => {
+          this.form().controls['email'].setValue(savedEmail);
+        }, 1);
+      }
+
+      const subscription = this.form().valueChanges?.pipe(debounceTime(1000)).subscribe({
         next: (value) => window.localStorage.setItem('saved-login-form', JSON.stringify({email: value.email})
         ),
       });
