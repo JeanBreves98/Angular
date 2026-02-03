@@ -1,5 +1,15 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+function mustContainSpecialCharacter(control: AbstractControl) {
+  const regex = /[!@#$%^&*(),.?":{}|<>_\-\\[\]/+=;']/;
+
+  if (regex.test(control.value)) {
+    return null;
+  }
+
+  return { doesNotContainSpecialCharacter: true };
+}
 
 @Component({
   selector: 'app-login',
@@ -14,7 +24,7 @@ export class LoginComponent {
       validators: [ Validators.email, Validators.required],
     }),
     password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)]
+      validators: [Validators.required, Validators.minLength(6), mustContainSpecialCharacter],
     }),
   });
 
